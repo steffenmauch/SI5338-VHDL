@@ -27,18 +27,14 @@ import write_coe_si5338
 import re
 import math
 
-filename = 'register_map.h'
+filename = './register_map.h'
 
 with open(filename, 'r') as content_file:
 	content = content_file.read()
 
-m = re.search('NUM_REGS_MAX (?P<value>\d*)\r',content)
+m = re.search('NUM_REGS_MAX (?P<value>\d*)',content)
 NUM_REGS_MAX = int(m.group('value'))
-POW_NUM_REGS_MAXdata = (( 1,  2,  3),
-		(11, 12, 13),
-		(21, 22, 23))
-
-	filename = 'workfile.coe' = math.ceil(math.log(NUM_REGS_MAX,2))
+POW_NUM_REGS_MAX = math.ceil(math.log(NUM_REGS_MAX,2))
 
 m = re.findall('\n{(?P<d1>.{3}),(?P<d2>.{2,4}),(?P<d3>.{4,5})}',content)
 
@@ -56,4 +52,4 @@ temp[1] = int( math.floor(NUM_REGS_MAX/256) )
 temp[2] = int( NUM_REGS_MAX % 256 )
 data[ int(2**POW_NUM_REGS_MAX-1) ] = temp
 
-write_coe_si5338.write_coe_si5338(data,'si5338_coe.coe')
+write_coe_si5338.write_coe_si5338(data,'si5338_coe_py.coe')

@@ -21,7 +21,6 @@
 #  You should have received a copy of the GNU General Public License along with
 #  this program; if not, write to the Free Software Foundation, Inc., 51
 #  Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-from numpy import matrix
 
 def write_coe_si5338(data, filename):
 
@@ -30,7 +29,7 @@ def write_coe_si5338(data, filename):
 
 	f = open(filename, 'w')
 	f.write('; This .COE file specifies initialization values for a block\n')
-	f.write('; memory of depth=%i, and width=%i. In this case, values are\n' %(2^depth , width) )
+	f.write('; memory of depth=%i, and width=%i. In this case, values are\n' %(2**depth , width) )
 	f.write('; specified in hexadecimal format.\n')
 	f.write('; script by Steffen Mauch, (c) 12/2013\n')
 	f.write('memory_initialization_radix=16;\n')
