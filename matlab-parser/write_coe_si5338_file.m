@@ -7,7 +7,7 @@ function write_coe_si5338_file(data, filename)
 %       the name of the desired output file
 %
 %   copyright by:
-%       Steffen Mauch, (c) 11/2013
+%       Steffen Mauch (C) 2013
 %       email: steffen.mauch (at) gmail.com
 %
 %  You can redistribute it and/or modify it under the terms of the GNU General Public

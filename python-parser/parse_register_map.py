@@ -8,7 +8,7 @@
 #  successfully tested with SI5338 configuration
 #
 #   copyright by:
-#       Steffen Mauch, (c) 12/2013
+#       Steffen Mauch (C) 2013
 #       email: steffen.mauch (at) gmail.com
 # 
 #  You can redistribute it and/or modify it under the terms of the GNU General Public
