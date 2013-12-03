@@ -15,7 +15,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="25" />
+   <WVObjectSize size="24" />
    <wvobject fp_name="/tb_si5338/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -77,7 +77,7 @@
    <wvobject fp_name="/tb_si5338/uut/mem_si5338_inst/addra" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">addra[8:0]</obj_property>
       <obj_property name="ObjectShortName">addra[8:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_si5338/uut/mem_si5338_inst/douta" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">douta[23:0]</obj_property>
@@ -116,9 +116,5 @@
       <obj_property name="ElementShortName">maximum_entries_bram</obj_property>
       <obj_property name="ObjectShortName">maximum_entries_bram</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_si5338/uut_slave/state_q" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">state_q</obj_property>
-      <obj_property name="ObjectShortName">state_q</obj_property>
    </wvobject>
 </wave_config>

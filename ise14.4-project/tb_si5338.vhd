@@ -1,30 +1,34 @@
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 -- Company: 
--- Engineer:
+-- Engineer: Steffen Mauch [steffen.mauch (at) gmail.com]
+-- 
+-- Create Date:    08:42:49 12/03/2013 
+-- Design Name: 
+-- Module Name:    tb_si5338 - testbench 
+-- Project Name:   si5338-vhdl testbench
+-- Target Devices: Xilinx Kintex-7
+-- Tool versions: 
+-- Description: 
 --
--- Create Date:   12:57:56 12/03/2013
--- Design Name:   
--- Module Name:   C:/Users/stma0138-win/Desktop/SI5338-VHDL-master/ise14.4-project/tb_si5338.vhd
--- Project Name:  SI5338
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: si5338
--- 
--- Dependencies:
--- 
--- Revision:
+-- Dependencies: 
+--
+-- Revision: 
 -- Revision 0.01 - File Created
--- Additional Comments:
 --
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
+-- You can redistribute it and/or modify it under the terms of the GNU General Public
+-- License as published by the Free Software Foundation, version 2.
+-- 
+-- This program is distributed in the hope that it will be useful, but WITHOUT
+-- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+-- 
+-- You should have received a copy of the GNU General Public License along with
+-- this program; if not, write to the Free Software Foundation, Inc., 51
+-- Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+--
+----------------------------------------------------------------------------------
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
@@ -57,23 +61,23 @@ ARCHITECTURE behavior OF tb_si5338 IS
 	);
 	end component si5338;
 	
---	component i2c_slave_si5338 is
+	component i2c_slave_si5338 is
 --   generic (
 --		SLAVE_ADDR 	: std_logic_vector( 6 downto 0 ) := "111" & "0000";
 --		SDA_DELAY 	: integer range 1 to 16 := 5
 --	);
---   port(
---      clk			: in std_logic;
---      reset_n		: in std_logic;
---
---      -- I2C clock and data (SDA is open drain)
---      scl			: in std_logic;
---      sda			: inout std_logic;
---
---      -- slave status
---      busy			: out std_logic
---   );
---	end component i2c_slave_si5338;
+   port(
+      clk			: in std_logic;
+      reset_n		: in std_logic;
+
+      -- I2C clock and data (SDA is open drain)
+      scl			: in std_logic;
+      sda			: inout std_logic
+
+      -- slave status
+      --busy			: out std_logic
+   );
+	end component i2c_slave_si5338;
 	
 	
 	constant INPUT_CLK 		: integer := 25_000_000;
@@ -117,22 +121,22 @@ BEGIN
 	SCL <= 'H';
 	SDA <= 'H';
 
---	uut_slave : i2c_slave_si5338
+	uut_slave : i2c_slave_si5338
 --   generic map(
 --		SLAVE_ADDR 	=> i2c_address,
 --		SDA_DELAY 	=> 2
 --	)
---   port map(
---      clk			=> clk,
---      reset_n		=> not reset,
---
---      -- I2C clock and data (SDA is open drain)
---      scl			=> SCL,
---      sda			=> SDA
---
---      -- slave status
---      --busy			: out std_logic
---   );
+   port map(
+      clk			=> clk,
+      reset_n		=> not reset,
+
+      -- I2C clock and data (SDA is open drain)
+      scl			=> SCL,
+      sda			=> SDA
+
+      -- slave status
+      --busy			: out std_logic
+   );
 	
 
    -- Clock process definitions
