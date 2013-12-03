@@ -129,6 +129,9 @@ begin
 
 --error <= i2c_ack_error;
 --internal_reset <= reset OR i2c_ack_error;
+
+i2c_reset_internal <= '0';
+
 internal_reset <= reset;
 i2c_reset_n <= not (internal_reset OR i2c_reset_internal);
 done <= done_sig;
@@ -176,7 +179,7 @@ si5338_proc : process (clk)
 --				    --FSM_tca9535 <= idle;
 --				end if;
 				
-				if( busy_prev = '0' AND i2c_busy = '1' ) then  --i2c busy just went high
+				if( busy_prev = '0' AND i2c_busy = '1' AND FSM_si5338_prev /= idle ) then  --i2c busy just went high
 					busy_cnt := busy_cnt + 1;                   --counts the times busy has gone from low to high during transaction
 					timeout <= 0;
 				end if;
@@ -194,8 +197,8 @@ si5338_proc : process (clk)
 						busy_cnt := 0;
 						busy_prev <= '0';
 						send_enable <= '0';
-						maximum_entries_bram <= 350;--to_integer( unsigned( mem_data(9 downto 0) ) );
-						mem_addr <= (others => '0');
+						
+						mem_addr <= (others => '1');
 						bram_counter <= 0;
 						
 						error <= '1';
@@ -204,11 +207,13 @@ si5338_proc : process (clk)
 						FSM_si5338 <= initial_state;
 						case busy_cnt is
 							when 0 =>
+								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"e6"; -- 230! //OEB_ALL = 1
 							
 							when 1 =>
+								mem_addr <= (others => '0');
 								i2c_data_wr <= x"10";
 							
 							when 2 =>

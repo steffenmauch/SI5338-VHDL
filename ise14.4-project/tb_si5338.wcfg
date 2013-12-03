@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/stma0138-win/Desktop/SI5338-VHDL-master/ise14.4-project/tb_si5338_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_textio" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_si5338" />
+            <top_module name="textio" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="25" />
+   <wvobject fp_name="/tb_si5338/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/scl" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">scl</obj_property>
+      <obj_property name="ObjectShortName">scl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/sda" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sda</obj_property>
+      <obj_property name="ObjectShortName">sda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/scl_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">scl_clk</obj_property>
+      <obj_property name="ObjectShortName">scl_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/scl_ena" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">scl_ena</obj_property>
+      <obj_property name="ObjectShortName">scl_ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/sda_ena_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sda_ena_n</obj_property>
+      <obj_property name="ObjectShortName">sda_ena_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/sda_int" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sda_int</obj_property>
+      <obj_property name="ObjectShortName">sda_int</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_ack_error" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">i2c_ack_error</obj_property>
+      <obj_property name="ObjectShortName">i2c_ack_error</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider37" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/done" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">done</obj_property>
+      <obj_property name="ObjectShortName">done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/error" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">error</obj_property>
+      <obj_property name="ObjectShortName">error</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/bus_clk" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">bus_clk</obj_property>
+      <obj_property name="ObjectShortName">bus_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/mem_si5338_inst/clka" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/mem_si5338_inst/addra" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addra[8:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[8:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/mem_si5338_inst/douta" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">douta[23:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[23:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/fsm_si5338" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">fsm_si5338</obj_property>
+      <obj_property name="ObjectShortName">fsm_si5338</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/busy_cnt_global" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_cnt_global</obj_property>
+      <obj_property name="ObjectShortName">busy_cnt_global</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/ena" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/send_enable" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">send_enable</obj_property>
+      <obj_property name="ObjectShortName">send_enable</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_busy" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">i2c_busy</obj_property>
+      <obj_property name="ObjectShortName">i2c_busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/busy_prev" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_prev</obj_property>
+      <obj_property name="ObjectShortName">busy_prev</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/maximum_entries_bram" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">maximum_entries_bram</obj_property>
+      <obj_property name="ObjectShortName">maximum_entries_bram</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut_slave/state_q" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state_q</obj_property>
+      <obj_property name="ObjectShortName">state_q</obj_property>
+   </wvobject>
+</wave_config>
