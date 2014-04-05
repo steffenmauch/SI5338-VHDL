@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 14.4
-# Date: Fri Nov 29 07:52:48 2013
+# Date: Sat Apr 05 19:20:55 2014
 #
 ##############################################################
 #
@@ -46,7 +46,7 @@ CSET axi_id_width=4
 CSET axi_slave_type=Memory_Slave
 CSET axi_type=AXI4_Full
 CSET byte_size=9
-CSET coe_file=C:\Users\stma0138-win\Documents\OptiMi2\vhdl\SI5338\si5338_coe.coe
+CSET coe_file=C:\Users\stma0138-win\Desktop\github\SI5338-VHDL\ise14.4-project\si5338_coe.coe
 CSET collision_warnings=ALL
 CSET component_name=mem_si5338
 CSET disable_collision_warnings=false
@@ -105,4 +105,4 @@ CSET write_width_b=24
 MISC pkg_timestamp=2012-11-19T16:22:25Z
 # END Extra information
 GENERATE
-# CRC: 37038977
+# CRC: be1e01ca

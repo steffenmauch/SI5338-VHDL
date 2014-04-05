@@ -128,11 +128,10 @@ signal bram_counter 				: integer range 0 to 2**WIDTH_BRAM-1;
 begin
 
 --error <= i2c_ack_error;
---internal_reset <= reset OR i2c_ack_error;
-
-i2c_reset_internal <= '0';
-
 internal_reset <= reset;
+
+i2c_reset_internal <= '0' OR i2c_ack_error;
+
 i2c_reset_n <= not (internal_reset OR i2c_reset_internal);
 done <= done_sig;
 
@@ -234,8 +233,9 @@ si5338_proc : process (clk)
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									FSM_si5338 <= config_state;
+									bram_counter <= 0;
 									busy_cnt := 0;
-									mem_addr <= std_logic_vector( to_unsigned( bram_counter,WIDTH_BRAM ));
+									mem_addr <= std_logic_vector( to_unsigned( 0, WIDTH_BRAM ));
 								end if;
 							
 							when others => NULL;
@@ -252,39 +252,33 @@ si5338_proc : process (clk)
 										send_enable <= '1';
 										i2c_rw <= '0';
 										i2c_data_wr <= reg_addr;
-										
-									when 1 =>
-										send_enable <= '0';
-										if( i2c_busy = '0' ) then
-											busy_cnt := busy_cnt + 1;
-										end if;
 									
-									when 2 =>
-										send_enable <= '1';
+									when 1 =>
 										i2c_rw <= '1';
 										
-									when 3 =>
+									when 2 =>
 										send_enable <= '0';
 										if( i2c_busy = '0' ) then
 											busy_cnt := busy_cnt + 1;
 											read_data <= i2c_data_rd;
 										end if;
 										
-									when 4 =>
+									when 3 =>
 										send_enable <= '1';
 										i2c_rw <= '0';
 										i2c_data_wr <= reg_addr;
 							
-									when 5 =>
+									when 4 =>
 										i2c_data_wr <= (reg_val AND reg_mask) OR (read_data AND not reg_mask);
 									
-									when 6 =>
+									when 5 =>
 										send_enable <= '0';
 										if( i2c_busy = '0' ) then
 											busy_cnt := 0;
 											bram_counter <= bram_counter + 1;
-											mem_addr <= std_logic_vector( to_unsigned( bram_counter+1,WIDTH_BRAM ));
-										end if;										
+											mem_addr <= std_logic_vector( to_unsigned( bram_counter+1, WIDTH_BRAM ));
+										end if;
+
 									
 									when others => NULL;
 								end case;
@@ -304,7 +298,7 @@ si5338_proc : process (clk)
 										if( i2c_busy = '0' ) then
 											busy_cnt := 0;
 											bram_counter <= bram_counter + 1;
-											mem_addr <= std_logic_vector( to_unsigned( bram_counter+1,WIDTH_BRAM ));
+											mem_addr <= std_logic_vector( to_unsigned( bram_counter+1, WIDTH_BRAM ));
 										end if;
 															
 									when others => NULL;
@@ -325,25 +319,18 @@ si5338_proc : process (clk)
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"DA"; -- 218!
-									
-							when 1 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
 								
-							when 2 =>
-								send_enable <= '1';
+							when 1 =>
 								i2c_rw <= '1';
 							
-							when 3 =>
+							when 2 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 									read_data <= i2c_data_rd;
 								end if;
 								
-							when 4 =>
+							when 3 =>
 								busy_cnt := 0;
 								if( ( read_data AND x"04" ) /= x"00" ) then
 									FSM_si5338 <= check_LOS_alarm_state;
@@ -362,48 +349,41 @@ si5338_proc : process (clk)
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"31"; -- 49!
-									
-							when 1 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
 							
-							when 2 =>
-								send_enable <= '1';
+							when 1 =>
 								i2c_rw <= '1';
 									
-							when 3 =>
+							when 2 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 									read_data <= i2c_data_rd;
 								end if;
 								
-							when 4 =>
+							when 3 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"31"; -- 49!
 								
-							when 5 =>
+							when 4 =>
 								i2c_data_wr <= read_data AND x"7f"; --//FCAL_OVRD_EN = 0
 							
-							when 6 =>
+							when 5 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 								end if;
 							
-							when 7 =>
+							when 6 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"F6"; -- 246!
 								
-							when 8 =>
+							when 7 =>
 								i2c_data_wr <= x"02"; --//soft reset
 --								wait_counter <= 0;
 								
-							when 9 =>
+							when 8 =>
 --								send_enable <= '0';
 --								wait_counter <= wait_counter + 1;
 --								if( i2c_busy = '0' ) then
@@ -416,16 +396,16 @@ si5338_proc : process (clk)
 									busy_cnt := busy_cnt + 1;
 								end if;
 								
-							when 10 =>
+							when 9 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"F1"; -- 241!
 								
-							when 11 =>
+							when 10 =>
 								i2c_data_wr <= x"65"; --//DIS_LOL = 0
 								wait_counter <= 0;
 								
-							when 12 =>
+							when 11 =>
 --								send_enable <= '0';
 --								if( i2c_busy = '0' ) then
 --									busy_cnt := busy_cnt + 1;
@@ -438,34 +418,27 @@ si5338_proc : process (clk)
 									end if;
 								end if;
 							
-							when 13 =>
+							when 12 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"DA"; -- 218!
 								
-							when 14 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
-								
-							when 15 =>
-								send_enable <= '1';
+							when 13 =>
 								i2c_rw <= '1';
 								
-							when 16 =>
+							when 14 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 									read_data <= i2c_data_rd;
 								end if;
 								
-							when 17 =>
+							when 15 =>
 								if( (read_data AND x"15") = x"00" ) then
 									busy_cnt := 0;
 									FSM_si5338 <= copy_state;
 								else
-									busy_cnt := 13;
+									busy_cnt := 12;
 								end if;
 								
 							when others => NULL;
@@ -480,178 +453,143 @@ si5338_proc : process (clk)
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"EB"; -- 235!
-									
-							when 1 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
 								
-							when 2 =>
-								send_enable <= '1';
+							when 1 =>
 								i2c_rw <= '1';
 									
-							when 3 =>
+							when 2 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 									read_data <= i2c_data_rd;
 								end if;
 								
-							when 4 =>
+							when 3 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"2D"; -- 45!
 								
-							when 5 =>
+							when 4 =>
 								i2c_data_wr <= read_data;
 							
-							when 6 =>
+							when 5 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 								end if;
 								
-							when 7 =>
+							when 6 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"EC"; -- 236!
+
+							when 7 =>
+								i2c_rw <= '1';
 									
 							when 8 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
+									read_data <= i2c_data_rd;
 								end if;
 								
 							when 9 =>
 								send_enable <= '1';
-								i2c_rw <= '1';
-									
+								i2c_rw <= '0';
+								i2c_data_wr <= x"2E"; -- 46!
+								
 							when 10 =>
+								i2c_data_wr <= read_data;
+								
+							when 11 =>
+								send_enable <= '0';
+								if( i2c_busy = '0' ) then
+									busy_cnt := busy_cnt + 1;
+								end if;
+								
+							when 12 =>
+								send_enable <= '1';
+								i2c_rw <= '0';
+								i2c_data_wr <= x"2F"; -- 47!
+								
+							when 13 =>
+								i2c_rw <= '1';
+								
+							when 14 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 									read_data <= i2c_data_rd;
 								end if;
 								
-							when 11 =>
-								send_enable <= '1';
-								i2c_rw <= '0';
-								i2c_data_wr <= x"2E"; -- 46!
-								
-							when 12 =>
-								i2c_data_wr <= read_data;
-								
-							when 13 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
-								
-							when 14 =>
-								send_enable <= '1';
-								i2c_rw <= '0';
-								i2c_data_wr <= x"2F"; -- 47!
-								
 							when 15 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
+								send_enable <= '1';
+								i2c_rw <= '0';
+								i2c_data_wr <= x"ED"; -- 237!
 								
 							when 16 =>
-								send_enable <= '1';
 								i2c_rw <= '1';
 								
 							when 17 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
-									read_data <= i2c_data_rd;
+									read_data2 <= i2c_data_rd;
 								end if;
 								
 							when 18 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
-								i2c_data_wr <= x"ED"; -- 237!
-								
-							when 19 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-								end if;
-								
-							when 20 =>
-								send_enable <= '1';
-								i2c_rw <= '1';
-								
-							when 21 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-									read_data2 <= i2c_data_rd;
-								end if;
-								
-							when 22 =>
-								send_enable <= '1';
-								i2c_rw <= '0';
 								i2c_data_wr <= x"2F"; -- 47!
 							
-							when 23 =>
+							when 19 =>
 								i2c_data_wr <= (read_data AND x"FC" ) OR ( read_data2 AND x"03");
 								
-							when 24 =>
+							when 20 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
 								end if;
 								
-							when 25 =>
+							when 21 =>
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"31"; -- 49!
+								
+							when 22 =>
+								i2c_rw <= '1';
 							
+							when 23 =>
+								send_enable <= '0';
+								if( i2c_busy = '0' ) then
+									busy_cnt := busy_cnt + 1;
+									read_data <= i2c_data_rd;
+								end if;
+								
+							when 24 =>
+								send_enable <= '1';
+								i2c_rw <= '0';
+								i2c_data_wr <= x"31"; -- 49!
+								
+							when 25 =>
+								i2c_data_wr <= read_data OR x"80"; --// FCAL_OVRD_EN = 1
+								
 							when 26 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
+									read_data <= i2c_data_rd;
 								end if;
 								
 							when 27 =>
 								send_enable <= '1';
-								i2c_rw <= '1';
-							
-							when 28 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-									read_data <= i2c_data_rd;
-								end if;
-								
-							when 29 =>
-								send_enable <= '1';
-								i2c_rw <= '0';
-								i2c_data_wr <= x"31"; -- 49!
-								
-							when 30 =>
-								i2c_data_wr <= read_data OR x"80"; --// FCAL_OVRD_EN = 1
-								
-							when 31 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := busy_cnt + 1;
-									read_data <= i2c_data_rd;
-								end if;
-								
-							when 32 =>
-								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"E6"; -- 230!
 								
-							when 33 =>
+							when 28 =>
 								i2c_data_wr <= x"00"; --// OEB_ALL = 0
 								
-							when 34 =>
+							when 29 =>
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									FSM_si5338 <= done_state;
