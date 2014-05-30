@@ -8,6 +8,13 @@ ClockBuilder support.
 A Python and MATLAB parser for the header file from ClockBuilder is 
 available as well as a demo project created with Xilinx ISE 14.4.
 
+Please make sure to regenerate the single port rom
+(generated with Xilinx CoreGen) with read depth 512
+and write width 24. Use e.g. the attached coe file
+(250 MHz clock output) or create with the python or
+matlab parser a customized on. Make sure that the coe
+file is correctly specified with CoreGen.
+
 
 Unless otherwise stated, the software on is distributed in the
 hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 

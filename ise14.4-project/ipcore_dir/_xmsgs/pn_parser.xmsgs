@@ -8,7 +8,7 @@
 <!-- Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.    -->
 
 <messages>
-<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;C:/Users/stma0138-win/Desktop/github/SI5338-VHDL/ise14.4-project/ipcore_dir/mem_si5338.vhd&quot; into library work</arg>
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;Y:/Documents/github/SI5338-VHDL/ise14.4-project/ipcore_dir/tmp/_cg/blk_mem_gen_v7_3.vhd&quot; into library work</arg>
 </msg>
 
 </messages>
