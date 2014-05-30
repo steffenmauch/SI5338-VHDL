@@ -15,6 +15,17 @@ and write width 24. Use e.g. the attached coe file
 matlab parser a customized on. Make sure that the coe
 file is correctly specified with CoreGen.
 
+ATTENTION:
+Usually Xilinx ISE uses full path when specifying coe files
+but when in the ipcore_dir/mem_si5338.xco I modified
+it to be relative.
+CSET coe_file=..\si5338_coe.coe
+When editing the CoreGen file the path is
+absolute afterwords and when the COE is not existing
+a pesudo CoreGen file is used instead and whenever
+opening the CoreGen file again, the default settings
+are set instead of the previous chosen one.
+
 
 Unless otherwise stated, the software on is distributed in the
 hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
