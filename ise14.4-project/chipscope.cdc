@@ -1,10 +1,10 @@
 #ChipScope Core Inserter Project File Version 3.0
-#Thu Nov 28 20:45:17 CET 2013
-Project.device.designInputFile=C\:\\Users\\stma0138-win\\Documents\\OptiMi2\\vhdl\\SI5338\\main_cs.ngc
-Project.device.designOutputFile=C\:\\Users\\stma0138-win\\Documents\\OptiMi2\\vhdl\\SI5338\\main_cs.ngc
+#Fri May 30 20:15:18 CEST 2014
+Project.device.designInputFile=Y\:\\Documents\\github\\SI5338-VHDL\\ise14.4-project\\main_cs.ngc
+Project.device.designOutputFile=Y\:\\Documents\\github\\SI5338-VHDL\\ise14.4-project\\main_cs.ngc
 Project.device.deviceFamily=20
 Project.device.enableRPMs=true
-Project.device.outputDirectory=C\:\\Users\\stma0138-win\\Documents\\OptiMi2\\vhdl\\SI5338\\_ngo
+Project.device.outputDirectory=Y\:\\Documents\\github\\SI5338-VHDL\\ise14.4-project\\_ngo
 Project.device.useSRL16=true
 Project.filter.dimension=13
 Project.filter<0>=
@@ -26,7 +26,7 @@ Project.icon.enableExtTriggerOut=false
 Project.icon.triggerInPinName=
 Project.icon.triggerOutPinName=
 Project.unit.dimension=1
-Project.unit<0>.clockChannel=LED_1_OBUF_BUFG
+Project.unit<0>.clockChannel=clock_internal_ff
 Project.unit<0>.clockEdge=Rising
 Project.unit<0>.dataChannel<0>=si5338_inst FSM_si5338_FSM_FFd1
 Project.unit<0>.dataChannel<10>=si5338_inst read_data<0>

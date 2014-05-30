@@ -116,7 +116,7 @@ signal i2c_ack_error	: std_logic;
 
 attribute S: string;
 
-type state_type is (idle, initial_state, config_state, 
+type state_type is (idle, reset_state, initial_state, config_state, 
 	check_LOS_alarm_state, next_config_state, copy_state, done_state, error_state);  --type of state machine.
 signal FSM_si5338 : state_type;
 signal FSM_si5338_prev : state_type;
@@ -207,7 +207,7 @@ si5338_proc : process (clk)
 				case FSM_si5338 is
 				
 					when idle =>
-						FSM_si5338 <= initial_state;
+						FSM_si5338 <= reset_state;
 						busy_cnt := 0;
 						busy_prev <= '0';
 						send_enable <= '0';
@@ -216,6 +216,29 @@ si5338_proc : process (clk)
 						bram_counter <= 0;
 						
 						error <= '1';
+					
+					when reset_state =>
+						FSM_si5338 <= reset_state;
+						case busy_cnt is
+							when 0 =>
+								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
+								send_enable <= '1';
+								i2c_rw <= '0';
+								i2c_data_wr <= x"f6"; -- 246
+								
+							when 1 =>
+								i2c_data_wr <= x"02";
+														
+							when 2 =>
+								send_enable <= '0';
+								if( i2c_busy = '0' ) then
+									busy_cnt := 0;
+									FSM_si5338 <= initial_state;
+								end if;
+								
+							when others =>
+								busy_cnt := 0;
+						end case;
 					
 					when initial_state =>
 						FSM_si5338 <= initial_state;
@@ -253,7 +276,7 @@ si5338_proc : process (clk)
 									mem_addr <= std_logic_vector( to_unsigned( 0, WIDTH_BRAM ));
 								end if;
 							
-							when others => NULL;
+							when others => busy_cnt := 0;
 						end case;					
 						
 					when config_state =>
@@ -295,7 +318,7 @@ si5338_proc : process (clk)
 										end if;
 
 									
-									when others => NULL;
+									when others => busy_cnt := 0;
 								end case;
 							
 							else
@@ -316,7 +339,7 @@ si5338_proc : process (clk)
 											mem_addr <= std_logic_vector( to_unsigned( bram_counter+1, WIDTH_BRAM ));
 										end if;
 															
-									when others => NULL;
+									when others => busy_cnt := 0;
 								end case;
 							
 							end if;
@@ -353,7 +376,7 @@ si5338_proc : process (clk)
 									FSM_si5338 <= next_config_state;
 								end if;
 							
-							when others => NULL;
+							when others => busy_cnt := 0;
 						end case;
 						
 					when next_config_state =>
@@ -456,7 +479,7 @@ si5338_proc : process (clk)
 									busy_cnt := 12;
 								end if;
 								
-							when others => NULL;
+							when others => busy_cnt := 0;
 						end case;
 					
 					when copy_state =>
@@ -611,7 +634,7 @@ si5338_proc : process (clk)
 									busy_cnt := 0;
 								end if;
 								
-							when others => NULL;
+							when others => busy_cnt := 0;
 						end case;
 
 					when done_state =>

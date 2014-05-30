@@ -56,7 +56,6 @@ use UNISIM.VComponents.all;
 
 entity main is
 PORT(
-    CPLD_XIO_clk		: in  std_logic;
     --reset	  			: in  std_logic;
 	 
 	 LED 					: out std_logic_vector( 7 downto 0 );
@@ -90,14 +89,42 @@ component si5338 is
 		);
 end component;
 
+
+attribute S: string;
+
 signal done : std_logic;
 signal reset_internal : std_logic;
 
 signal error : std_logic;
+signal EOS : std_logic;
 
 signal clk0 : std_logic;
+signal clock_internal : std_logic;
+attribute S of clock_internal : signal is "TRUE";
 
 begin
+
+STARTUPE2_inst : STARTUPE2
+generic map (
+   PROG_USR => "FALSE",  -- Activate program event security feature. Requires encrypted bitstreams.
+   SIM_CCLK_FREQ => 20.0  -- Set the Configuration Clock Frequency(ns) for simulation.
+)
+port map (
+   --CFGCLK => CFGCLK,       -- 1-bit output: Configuration main clock output
+   CFGMCLK => clock_internal,     -- 1-bit output: Configuration internal oscillator clock output
+	-- configured to 50 MHz while generating bit file!
+   EOS => EOS,             -- 1-bit output: Active high output signal indicating the End Of Startup.
+   --PREQ => PREQ,           -- 1-bit output: PROGRAM request to fabric output
+   CLK => '0',             -- 1-bit input: User start-up clock input
+   GSR => '0',             -- 1-bit input: Global Set/Reset input (GSR cannot be used for the port name)
+   GTS => '0',             -- 1-bit input: Global 3-state input (GTS cannot be used for the port name)
+   KEYCLEARB => '0', -- 1-bit input: Clear AES Decrypter Key input from Battery-Backed RAM (BBRAM)
+   PACK => '0',           -- 1-bit input: PROGRAM acknowledge input
+   USRCCLKO => '0',   -- 1-bit input: User CCLK input
+   USRCCLKTS => '0', -- 1-bit input: User CCLK 3-state enable input
+   USRDONEO => '1',   -- 1-bit input: User DONE pin output control
+   USRDONETS => '1'  -- 1-bit input: User DONE 3-state enable output
+);
 
 IBUFG_inst : IBUFG
 port map (
@@ -105,11 +132,10 @@ port map (
    I => CLK0_SI5338
 );
 
-
 SI5338_IN4 <= '0';
 SI5338_CLK_EN <= '1';
 
-reset_internal <= '0';
+reset_internal <= not EOS;
 
 BOARD_LED_RED <= '1';
 BOARD_LED_GREEN <= '0';
@@ -117,18 +143,18 @@ BOARD_LED_GREEN <= '0';
 LED(7) <= error;
 LED( 6 downto 4 ) <= "101";
 LED(3) <= clk0;
-LED(2) <= SI5338_SCL;
-LED(1) <= CPLD_XIO_clk;
+LED(2) <= '0';
+LED(1) <= clock_internal;
 LED(0) <= done;
 
 si5338_inst : si5338 
 	generic map(
-		input_clk 		=> 25_000_000, --input clock speed from user logic in Hz
+		input_clk 		=> 50_000_000, --input clock speed from user logic in Hz
 		i2c_address		=> "111" & "0000",
 		bus_clk   		=> 400_000    --speed the i2c bus (scl) will run at in Hz
 	)
 	port map(
-		clk     		=> CPLD_XIO_clk,
+		clk     		=> clock_internal,
 		reset			=> reset_internal,
 				
 		done			=> done,
