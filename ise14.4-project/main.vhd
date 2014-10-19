@@ -14,7 +14,7 @@
 -- Revision: 
 -- Revision 0.01 - File Created
 --
--- Copyright (c) <2014, Steffen Mauch
+-- Copyright (c) 2013/2014, Steffen Mauch
 -- All rights reserved.
 --
 -- Redistribution and use in source and binary forms, with or without
@@ -141,15 +141,15 @@ BOARD_LED_RED <= '1';
 BOARD_LED_GREEN <= '0';
 
 LED(7) <= error;
-LED( 6 downto 4 ) <= "101";
+LED( 6 downto 4 ) <= done & done & done;
 LED(3) <= clk0;
-LED(2) <= '0';
+LED(2) <= EOS;
 LED(1) <= clock_internal;
 LED(0) <= done;
 
 si5338_inst : si5338 
 	generic map(
-		input_clk 		=> 50_000_000, --input clock speed from user logic in Hz
+		input_clk 		=> 65_000_000, --input clock speed from user logic in Hz
 		i2c_address		=> "111" & "0000",
 		bus_clk   		=> 400_000    --speed the i2c bus (scl) will run at in Hz
 	)

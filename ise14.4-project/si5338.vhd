@@ -15,7 +15,7 @@
 -- Revision: 
 -- Revision 0.01 - File Created
 --
--- Copyright (c) <2014, Steffen Mauch
+-- Copyright (c) 2013/2014, Steffen Mauch
 -- All rights reserved.
 --
 -- Redistribution and use in source and binary forms, with or without
@@ -108,6 +108,7 @@ signal mem_data		: std_logic_vector( 23 downto 0 );
 
 signal send_enable 	: std_logic;
 signal i2c_rw 			: std_logic;
+signal error_int		: std_logic;
 
 signal i2c_data_wr   : std_logic_vector(7 downto 0); 
 signal i2c_busy      : std_logic;
@@ -142,10 +143,11 @@ signal bram_counter 				: integer range 0 to 2**WIDTH_BRAM-1;
 
 begin
 
---error <= i2c_ack_error;
+error <= i2c_ack_error;
+--error <= error_int;
 internal_reset <= reset;
 
-i2c_reset_internal <= '0' OR i2c_ack_error;
+i2c_reset_internal <= '0' ;--OR i2c_ack_error;
 
 i2c_reset_n <= not (internal_reset OR i2c_reset_internal);
 done <= done_sig;
@@ -176,7 +178,7 @@ si5338_proc : process (clk)
             busy_cnt_global <= 0;
 				FSM_si5338 <= idle;
 				
-				error <= '1';
+				error_int <= '1';
 				
 				read_data <= (others => '0');
 				read_data2 <= (others => '0');
@@ -190,7 +192,7 @@ si5338_proc : process (clk)
 				
 --				timeout <= timeout + 1;
 --				if( timeout = input_clk-1 ) then
---				    --FSM_tca9535 <= idle;
+--				    FSM_si5338 <= idle;
 --				end if;
 				
 				if( busy_prev = '0' AND i2c_busy = '1' AND FSM_si5338_prev /= idle ) then  --i2c busy just went high
@@ -215,30 +217,36 @@ si5338_proc : process (clk)
 						mem_addr <= (others => '1');
 						bram_counter <= 0;
 						
-						error <= '1';
+						error_int <= '1';
 					
 					when reset_state =>
 						FSM_si5338 <= reset_state;
-						case busy_cnt is
-							when 0 =>
-								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
-								send_enable <= '1';
-								i2c_rw <= '0';
-								i2c_data_wr <= x"f6"; -- 246
-								
-							when 1 =>
-								i2c_data_wr <= x"02";
-														
-							when 2 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := 0;
-									FSM_si5338 <= initial_state;
-								end if;
-								
-							when others =>
-								busy_cnt := 0;
-						end case;
+						--if( wait_counter < (input_clk/30) ) then
+						--	wait_counter <= wait_counter + 1;
+						--else
+							FSM_si5338 <= initial_state;
+						--end if;
+						
+--						case busy_cnt is
+--							when 0 =>
+--								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
+--								send_enable <= '1';
+--								i2c_rw <= '0';
+--								i2c_data_wr <= x"f6"; -- 246
+--								
+--							when 1 =>
+--								i2c_data_wr <= x"02";
+--														
+--							when 2 =>
+--								send_enable <= '0';
+--								if( i2c_busy = '0' ) then
+--									busy_cnt := 0;
+--									FSM_si5338 <= initial_state;
+--								end if;
+--								
+--							when others =>
+--								busy_cnt := 0;
+--						end case;
 					
 					when initial_state =>
 						FSM_si5338 <= initial_state;
@@ -484,7 +492,7 @@ si5338_proc : process (clk)
 					
 					when copy_state =>
 						FSM_si5338 <= copy_state;
-						error <= '0';
+						error_int <= '0';
 						
 						case busy_cnt is
 							when 0 =>
@@ -647,6 +655,8 @@ si5338_proc : process (clk)
 							error_fsm_last_state <= std_logic_vector( to_unsigned(FSM_si5338'pos(FSM_si5338_prev),5) );
 						end if;
 						
+					 when others =>
+					 
 				end case;
 				
 				if(  i2c_ack_error = '1' ) then

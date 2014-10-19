@@ -15,7 +15,7 @@
 -- Revision: 
 -- Revision 0.01 - File Created
 --
--- Copyright (c) <2014, Steffen Mauch
+-- Copyright (c) 2013/2014, Steffen Mauch
 -- All rights reserved.
 --
 -- Redistribution and use in source and binary forms, with or without
@@ -76,23 +76,21 @@ ARCHITECTURE behavior OF tb_si5338 IS
 	);
 	end component si5338;
 	
-	component i2c_slave_si5338 is
---   generic (
---		SLAVE_ADDR 	: std_logic_vector( 6 downto 0 ) := "111" & "0000";
---		SDA_DELAY 	: integer range 1 to 16 := 5
---	);
-   port(
-      clk			: in std_logic;
-      reset_n		: in std_logic;
-
-      -- I2C clock and data (SDA is open drain)
-      scl			: in std_logic;
-      sda			: inout std_logic
-
-      -- slave status
-      --busy			: out std_logic
-   );
-	end component i2c_slave_si5338;
+component I2C_slave is
+	generic (
+		SLAVE_ADDR : std_logic_vector(6 downto 0));
+	port (
+		scl : inout std_logic;
+		sda : inout std_logic;
+		clk : in std_logic;
+		rst : in std_logic;
+		-- User interface
+		read_req : out std_logic;
+		data_to_master : in std_logic_vector(7 downto 0);
+		data_valid : out std_logic;
+		data_from_master : out std_logic_vector(7 downto 0)
+	);
+end component I2C_slave;
 	
 	
 	constant INPUT_CLK 		: integer := 25_000_000;
@@ -105,8 +103,8 @@ ARCHITECTURE behavior OF tb_si5338 IS
    signal reset : std_logic := '0';
 
 	--BiDirs
-   signal SCL : std_logic;
-   signal SDA : std_logic;
+   signal SCL : std_logic := 'H';
+   signal SDA : std_logic := 'H';
 
  	--Outputs
    signal done : std_logic;
@@ -132,26 +130,22 @@ BEGIN
           SCL => SCL,
           SDA => SDA
         );
-	
-	SCL <= 'H';
-	SDA <= 'H';
 
-	uut_slave : i2c_slave_si5338
---   generic map(
---		SLAVE_ADDR 	=> i2c_address,
---		SDA_DELAY 	=> 2
---	)
-   port map(
-      clk			=> clk,
-      reset_n		=> not reset,
-
-      -- I2C clock and data (SDA is open drain)
-      scl			=> SCL,
-      sda			=> SDA
-
-      -- slave status
-      --busy			: out std_logic
-   );
+	uut_slave : I2C_slave
+	generic map(
+		SLAVE_ADDR => i2c_address
+		)
+	port map(
+		scl 	=> SCL,
+		sda 	=> SDA,
+		clk 	=> clk,
+		rst 	=> reset,
+		-- User interface
+		--read_req : out std_logic;
+		data_to_master 	=> (others => '0')
+		--data_valid : out std_logic;
+		--data_from_master : out std_logic_vector(7 downto 0)
+	);
 	
 
    -- Clock process definitions
@@ -163,6 +157,9 @@ BEGIN
 		wait for clk_period/2;
    end process;
  
+
+SCL <= 'H';
+SDA <= 'H';
 
    -- Stimulus process
    stim_proc: process
