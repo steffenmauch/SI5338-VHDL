@@ -12,16 +12,20 @@ Please make sure to regenerate the single port rom
 (generated with Xilinx CoreGen) with read depth 512
 and write width 24. Use e.g. the attached coe file
 (250 MHz clock output) or create with the python or
-matlab parser a customized on. Make sure that the coe
-file is correctly specified with CoreGen.
+matlab parser a customized one. Make sure that the coe
+file is correctly given within CoreGen.
 
 ATTENTION:
-Usually Xilinx ISE uses full path when specifying coe files
-but when in the ipcore_dir/mem_si5338.xco I modified
-it to be relative.
+Usually Xilinx ISE uses full path when specifying coe files,
+but it could be set manually to be relative. Change the file
+ipcore_dir/mem_si5338.xco, such that it looks
+as follows:
+
 CSET coe_file=..\si5338_coe.coe
-When editing the CoreGen file the path is
-absolute afterwords and when the COE is not existing
+
+
+But when editing the CoreGen file with ISE, the path is set to
+an absolut afterwords, when the COE is not existing
 a pesudo CoreGen file is used instead and whenever
 opening the CoreGen file again, the default settings
 are set instead of the previous chosen one.
