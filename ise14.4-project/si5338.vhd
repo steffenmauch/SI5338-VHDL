@@ -89,7 +89,7 @@ component i2c_master IS
     data_wr   : IN     STD_LOGIC_VECTOR(7 DOWNTO 0); --data to write to slave
     busy      : OUT    STD_LOGIC;                    --indicates transaction in progress
     data_rd   : OUT    STD_LOGIC_VECTOR(7 DOWNTO 0); --data read from slave
-    ack_error : INOUT  STD_LOGIC;                    --flag if improper acknowledge from slave
+    ack_error : OUT    STD_LOGIC;                    --flag if improper acknowledge from slave
     sda       : INOUT  STD_LOGIC;                    --serial data output of i2c bus
     scl       : INOUT  STD_LOGIC);                   --serial clock output of i2c bus
 END component;
@@ -121,8 +121,6 @@ type state_type is (idle, reset_state, initial_state, config_state,
 	check_LOS_alarm_state, next_config_state, copy_state, done_state, error_state);  --type of state machine.
 signal FSM_si5338 : state_type;
 signal FSM_si5338_prev : state_type;
-signal error_fsm_last_state : std_logic_vector( 4 downto 0);
-attribute S of error_fsm_last_state : signal is "TRUE";
 
 signal wait_counter : integer range 0 to 2**26-1;
 signal timeout : integer range 0 to input_clk-1;
@@ -221,38 +219,32 @@ si5338_proc : process (clk)
 					
 					when reset_state =>
 						FSM_si5338 <= reset_state;
-						--if( wait_counter < (input_clk/30) ) then
-						--	wait_counter <= wait_counter + 1;
-						--else
-							FSM_si5338 <= initial_state;
-						--end if;
 						
---						case busy_cnt is
---							when 0 =>
---								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
---								send_enable <= '1';
---								i2c_rw <= '0';
---								i2c_data_wr <= x"f6"; -- 246
---								
---							when 1 =>
---								i2c_data_wr <= x"02";
---														
---							when 2 =>
---								send_enable <= '0';
---								if( i2c_busy = '0' ) then
---									busy_cnt := 0;
---									FSM_si5338 <= initial_state;
---								end if;
---								
---							when others =>
---								busy_cnt := 0;
---						end case;
+						case busy_cnt is	-- this is not required but when restarting after error it is advantageous
+							when 0 =>
+								send_enable <= '1';
+								i2c_rw <= '0';
+								i2c_data_wr <= x"f6"; -- 246
+								
+							when 1 =>
+								i2c_data_wr <= x"02";
+														
+							when 2 =>
+								send_enable <= '0';
+								if( i2c_busy = '0' ) then
+									busy_cnt := 0;
+									FSM_si5338 <= initial_state;
+								end if;
+								
+							when others =>
+								busy_cnt := 0;
+						end case;
 					
 					when initial_state =>
 						FSM_si5338 <= initial_state;
 						case busy_cnt is
 							when 0 =>
-								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) );-- 350; -- default ist 350
+								maximum_entries_bram <= to_integer( unsigned( mem_data(9 downto 0) ) ); -- default ist 350
 								send_enable <= '1';
 								i2c_rw <= '0';
 								i2c_data_wr <= x"e6"; -- 230! //OEB_ALL = 1
@@ -427,16 +419,8 @@ si5338_proc : process (clk)
 								
 							when 7 =>
 								i2c_data_wr <= x"02"; --//soft reset
---								wait_counter <= 0;
 								
 							when 8 =>
---								send_enable <= '0';
---								wait_counter <= wait_counter + 1;
---								if( i2c_busy = '0' ) then
---									if( wait_counter = (input_clk/30) ) then
---										busy_cnt := busy_cnt + 1;
---									end if;
---								end if;
 								send_enable <= '0';
 								if( i2c_busy = '0' ) then
 									busy_cnt := busy_cnt + 1;
@@ -452,10 +436,6 @@ si5338_proc : process (clk)
 								wait_counter <= 0;
 								
 							when 11 =>
---								send_enable <= '0';
---								if( i2c_busy = '0' ) then
---									busy_cnt := busy_cnt + 1;
---								end if;
 								send_enable <= '0';
 								wait_counter <= wait_counter + 1;
 								if( i2c_busy = '0' ) then
@@ -651,9 +631,6 @@ si5338_proc : process (clk)
 					
 					when error_state =>
 						FSM_si5338 <= error_state;
-						if( FSM_si5338_prev /= error_state ) then
-							error_fsm_last_state <= std_logic_vector( to_unsigned(FSM_si5338'pos(FSM_si5338_prev),5) );
-						end if;
 						
 					 when others =>
 					 
