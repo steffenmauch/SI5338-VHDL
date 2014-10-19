@@ -218,27 +218,28 @@ si5338_proc : process (clk)
 						error_int <= '1';
 					
 					when reset_state =>
-						FSM_si5338 <= reset_state;
-						
-						case busy_cnt is	-- this is not required but when restarting after error it is advantageous
-							when 0 =>
-								send_enable <= '1';
-								i2c_rw <= '0';
-								i2c_data_wr <= x"f6"; -- 246
-								
-							when 1 =>
-								i2c_data_wr <= x"02";
-														
-							when 2 =>
-								send_enable <= '0';
-								if( i2c_busy = '0' ) then
-									busy_cnt := 0;
-									FSM_si5338 <= initial_state;
-								end if;
-								
-							when others =>
-								busy_cnt := 0;
-						end case;
+--						FSM_si5338 <= reset_state;
+						FSM_si5338 <= initial_state;
+--						
+--						case busy_cnt is	-- this is not required but when restarting after error it is advantageous
+--							when 0 =>
+--								send_enable <= '1';
+--								i2c_rw <= '0';
+--								i2c_data_wr <= x"f6"; -- 246
+--								
+--							when 1 =>
+--								i2c_data_wr <= x"02";
+--														
+--							when 2 =>
+--								send_enable <= '0';
+--								if( i2c_busy = '0' ) then
+--									busy_cnt := 0;
+--									FSM_si5338 <= initial_state;
+--								end if;
+--								
+--							when others =>
+--								busy_cnt := 0;
+--						end case;
 					
 					when initial_state =>
 						FSM_si5338 <= initial_state;
