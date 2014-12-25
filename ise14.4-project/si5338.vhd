@@ -145,7 +145,7 @@ error <= i2c_ack_error;
 --error <= error_int;
 internal_reset <= reset;
 
-i2c_reset_internal <= '0' ;--OR i2c_ack_error;
+i2c_reset_internal <= '0';-- OR i2c_ack_error;
 
 i2c_reset_n <= not (internal_reset OR i2c_reset_internal);
 done <= done_sig;

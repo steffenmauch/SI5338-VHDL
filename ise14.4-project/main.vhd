@@ -137,8 +137,8 @@ SI5338_CLK_EN <= '1';
 
 reset_internal <= not EOS;
 
-BOARD_LED_RED <= '1';
-BOARD_LED_GREEN <= '0';
+BOARD_LED_RED <=  done;
+BOARD_LED_GREEN <= EOS;
 
 LED(7) <= error;
 LED( 6 downto 4 ) <= done & done & done;

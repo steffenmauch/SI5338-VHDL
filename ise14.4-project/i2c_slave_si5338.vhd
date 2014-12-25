@@ -124,7 +124,7 @@ begin
 				end if;
 				if bits_processed_reg = 8 and scl_falling_reg = '1' then
 					bits_processed_reg <= 0;
-					if addr_reg = SLAVE_ADDR then -- check req address
+					if to_integer(unsigned(addr_reg)) = to_integer(unsigned(SLAVE_ADDR)) then -- check req address
 						state_reg <= i2c_answer_ack_start;
 						if cmd_reg = '1' then -- issue read request
 							read_req_reg <= '1';
@@ -132,9 +132,9 @@ begin
 						end if;
 					else
 						assert false
-						report ("I2C: slave address wrong" )
-						--report ("I2C: slave address: " & str(SLAVE_ADDR) &
-						--", requested address: " & str(addr_reg))
+						--report ("I2C: slave address wrong" )
+						report ("I2C: slave address: " & integer'image(to_integer(unsigned(SLAVE_ADDR))) &
+						", requested address: " & integer'image(to_integer(unsigned(addr_reg))))
 						severity note;
 						state_reg <= i2c_idle;
 					end if;
