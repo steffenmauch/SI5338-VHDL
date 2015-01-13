@@ -101,6 +101,7 @@ signal EOS : std_logic;
 signal clk0 : std_logic;
 signal clock_internal : std_logic;
 attribute S of clock_internal : signal is "TRUE";
+signal clock_internal_i : std_logic;
 
 begin
 
@@ -111,7 +112,7 @@ generic map (
 )
 port map (
    --CFGCLK => CFGCLK,       -- 1-bit output: Configuration main clock output
-   CFGMCLK => clock_internal,     -- 1-bit output: Configuration internal oscillator clock output
+   CFGMCLK => clock_internal_i,     -- 1-bit output: Configuration internal oscillator clock output
 	-- configured to 50 MHz while generating bit file!
    EOS => EOS,             -- 1-bit output: Active high output signal indicating the End Of Startup.
    --PREQ => PREQ,           -- 1-bit output: PROGRAM request to fabric output
@@ -124,6 +125,12 @@ port map (
    USRCCLKTS => '0', -- 1-bit input: User CCLK 3-state enable input
    USRDONEO => '1',   -- 1-bit input: User DONE pin output control
    USRDONETS => '1'  -- 1-bit input: User DONE 3-state enable output
+);
+
+clock_internal_bufg_inst : BUFG
+port map (
+   O => clock_internal,  				-- Clock buffer output
+   I => clock_internal_i
 );
 
 IBUFG_inst : IBUFG
