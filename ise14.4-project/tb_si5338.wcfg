@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="C:/Users/stma0138-win/Desktop/SI5338-VHDL-master/ise14.4-project/tb_si5338_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="C:/Users/smauch/Downloads/SI5338-VHDL-master/SI5338-VHDL-master/ise14.4-project/tb_si5338_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -15,7 +15,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="24" />
+   <WVObjectSize size="29" />
    <wvobject fp_name="/tb_si5338/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -24,13 +24,13 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_si5338/scl" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">scl</obj_property>
-      <obj_property name="ObjectShortName">scl</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb_si5338/sda" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">sda</obj_property>
       <obj_property name="ObjectShortName">sda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/scl" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">scl</obj_property>
+      <obj_property name="ObjectShortName">scl</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/scl_clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">scl_clk</obj_property>
@@ -116,5 +116,25 @@
       <obj_property name="ElementShortName">maximum_entries_bram</obj_property>
       <obj_property name="ObjectShortName">maximum_entries_bram</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/data_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data_clk</obj_property>
+      <obj_property name="ObjectShortName">data_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/data_clk_prev" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data_clk_prev</obj_property>
+      <obj_property name="ObjectShortName">data_clk_prev</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/fsm_si5338" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">fsm_si5338</obj_property>
+      <obj_property name="ObjectShortName">fsm_si5338</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut/i2c_master_inst/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_si5338/uut_slave/state_reg" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state_reg</obj_property>
+      <obj_property name="ObjectShortName">state_reg</obj_property>
    </wvobject>
 </wave_config>

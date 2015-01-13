@@ -70,23 +70,23 @@ begin
 		sda_prev_reg <= sda_reg;
 		-- Detect rising and falling SCL
 		scl_rising_reg <= '0';
-		if scl_prev_reg = '0' and scl_reg = 'H' then
+		if scl_prev_reg = '0' and (scl_reg = 'H' or scl_reg = '1') then
 			scl_rising_reg <= '1';
 		end if;
 		scl_falling_reg <= '0';
-		if scl_prev_reg = 'H' and scl_reg = '0' then
+		if (scl_prev_reg = 'H' or scl_prev_reg = '1' ) and scl_reg = '0' then
 			scl_falling_reg <= '1';
 		end if;
 		-- Detect I2C START condition
 		start_reg <= '0';
 		stop_reg <= '0';
-		if scl_reg = 'H' and scl_prev_reg = 'H' and
+		if (scl_reg = 'H' OR scl_reg = '1') and (scl_prev_reg = 'H' OR scl_prev_reg = '1') and
 			sda_prev_reg = 'H' and sda_reg = '0' then
 			start_reg <= '1';
 			stop_reg <= '0';
 		end if;
 		-- Detect I2C STOP condition
-		if scl_prev_reg = 'H' and scl_reg = 'H' and
+		if (scl_prev_reg = 'H' OR scl_prev_reg = '1') and (scl_reg = 'H' OR scl_reg = '1') and
 			sda_prev_reg = '0' and sda_reg = 'H' then
 			start_reg <= '0';
 			stop_reg <= '1';

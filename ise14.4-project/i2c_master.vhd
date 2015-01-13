@@ -111,7 +111,10 @@ ack_error <= ack_error_int;
   --state machine and writing to sda during scl low (data_clk rising edge)
   PROCESS(clk, reset_n)
   BEGIN
-    IF(reset_n = '0') THEN                 --reset asserted
+
+    IF(clk'EVENT AND clk = '1') THEN
+	
+	IF(reset_n = '0') THEN                 --reset asserted
       state <= ready;                      --return to initial state
       busy <= '1';                         --indicate not available
       scl_ena <= '0';                      --sets scl high impedance
@@ -119,10 +122,11 @@ ack_error <= ack_error_int;
       ack_error_int <= '0';                    --clear acknowledge error flag
       bit_cnt <= 7;                        --restarts data bit counter
       data_rd <= "00000000";               --clear data read port
-    ELSIF(clk'EVENT AND clk = '1') THEN
-      IF(data_clk = '1' AND data_clk_prev = '0') THEN  --data clock rising edge
+	  
+      elsIF(data_clk = '1' AND data_clk_prev = '0') THEN  --data clock rising edge
         CASE state IS
           WHEN ready =>                      --idle state
+			 scl_ena <= '0';
             IF(ena = '1') THEN               --transaction requested
               busy <= '1';                   --flag busy
               addr_rw <= addr & rw;          --collect requested slave address and command
@@ -245,7 +249,7 @@ ack_error <= ack_error_int;
                  sda_int WHEN OTHERS;     --set to internal sda signal    
       
   --set scl and sda outputs
-  scl <= '0' WHEN (scl_ena = '1' AND scl_clk = '0') ELSE 'Z';
+  scl <= '0' WHEN (scl_ena = '1' AND scl_clk = '0') ELSE '1';
   sda <= '0' WHEN sda_ena_n = '0' ELSE 'Z';
   
 END logic;
